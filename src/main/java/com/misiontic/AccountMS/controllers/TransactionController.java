@@ -1,4 +1,6 @@
 package com.misiontic.AccountMS.controllers;
+import com.misiontic.AccountMS.exceptions.AccountNotFoundException;
+import com.misiontic.AccountMS.models.Account;
 import com.misiontic.AccountMS.models.Transaction;
 import com.misiontic.AccountMS.repositories.AccountRepository;
 import com.misiontic.AccountMS.repositories.TransactionRepository;
@@ -22,6 +24,15 @@ public class TransactionController {
     }
     @PostMapping("/transaction/")
     Transaction newTransaction(@RequestBody Transaction transaction){
+        Account accountDestiny = accountRepository.findById(transaction.getUsernameDestiny()).orElse(null);
+        Account accountOrigin = accountRepository.findById(transaction.getUsernameOrigin()).orElse(null);
+        if(accountOrigin == null || accountDestiny == null){
+            throw new AccountNotFoundException("La cuenta origen o la cuenta destino no existen");
+        }
+        accountDestiny.setBalance(accountDestiny.getBalance() + transaction.getValue());
+        accountOrigin.setBalance(accountOrigin.getBalance() - transaction.getValue());
+        accountRepository.save(accountDestiny);
+        accountRepository.save(accountOrigin);
         return transactionRepository.save(transaction);
     }
 

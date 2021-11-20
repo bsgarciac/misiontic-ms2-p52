@@ -1,4 +1,5 @@
 package com.misiontic.AccountMS.controllers;
+import com.misiontic.AccountMS.exceptions.AccountNotFoundException;
 import com.misiontic.AccountMS.repositories.AccountRepository;
 import com.misiontic.AccountMS.models.Account;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +16,9 @@ public class AccountController {
 
 
     @GetMapping("/accounts/{username}")
-    public Optional<Account> getAccount(@PathVariable String username){
-        return this.repository.findById(username);
+    public Account getAccount(@PathVariable String username){
+        return this.repository.findById(username)
+                .orElseThrow(() -> new AccountNotFoundException("La cuenta no existe"));
     }
 
     @PostMapping("/accounts")

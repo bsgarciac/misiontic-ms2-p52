@@ -8,6 +8,7 @@ public class Transaction {
     private String id;
     private String usernameOrigin;
     private String usernameDestiny;
+    private Integer value;
     private Date date;
 
     public Transaction(String id, String usernameOrigin, String usernameDestiny, Date date) {
@@ -36,5 +37,13 @@ public class Transaction {
     }
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
+
+    public void setValue(Integer value) {
+        this.value = value;
     }
 }
